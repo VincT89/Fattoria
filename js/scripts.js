@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		while (continua) {
 			let azione = prompt(
-				"Cosa vuoi fare? \n1. Aggiungi Animale, \n2.Nutri Animale, \n3.Aggiungi Campo, \n4.Semina Campo, \n5. Raccogli Coltura, \n6.Vendi Prodotto, \n7. Mostra Stato Fattoria, \n0. Esci"
+				"Cosa vuoi fare? \n1. Aggiungi Animale \n2. Nutri Animale \n3. Aggiungi Campo \n4. Semina Campo \n5. Raccogli Coltura \n6. Vendi Prodotto \n7. Mostra Stato Fattoria \n0. Esci"
 			);
 
 			switch (azione) {
