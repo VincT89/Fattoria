@@ -19,23 +19,25 @@ class Campo {
 	aggiungiCampo(campo) {
 		this.campi.push(campo);
 		alert(
-			`Campo di ${campo.tipoColtura}, in quantità di ${campo.quantita} aggiunto alla fattoria.`
+			`Campo di ${campo.tipoColtura}, con capienza di ${campo.quantita} ettari aggiunto alla fattoria.`
 		);
 	}
 
 	semina(tipoColtura, quantita) {
 		this.tipoColtura = tipoColtura;
 		this.quantita = quantita;
-		alert(`Hai seminato ${quantita} di ${this.tipoColtura}.`);
+		alert(`Hai seminato ${quantita} ettari di ${this.tipoColtura}.`);
   }
   
 
 }
 
 class Prodotto {
-  constructor(tipoProdotto, quantita) {
+  constructor(tipoProdotto, quantita, prezzo) {
     this.tipoProdotto = tipoProdotto;
-    this.quantita = quantita;
+		this.quantita = quantita;
+		this.prezzo = prezzo;
+		
   }
 
 }
@@ -90,37 +92,39 @@ class Fattoria {
     if (!this.prodotti[this.campi[indiceCampo].tipoColtura]) {
       this.prodotti[this.campi[indiceCampo].tipoColtura] = 0;
     }
-    this.prodotti[this.campi[indiceCampo].tipoColtura] += quantita;
-    alert(`Hai raccolto ${quantita} di ${this.campi[indiceCampo].tipoColtura} che ora sono nel tuo inventario.`);
+		this.prodotti[this.campi[indiceCampo].tipoColtura] += quantita;
+    alert(`Hai raccolto ${quantita} quintali di ${this.campi[indiceCampo].tipoColtura} che ora sono nel tuo magazzino.`);
   }
 
-  vendiProdotto(tipoProdotto, quantita) {
-    if (!this.prodotti[tipoProdotto] || this.prodotti[tipoProdotto] < quantita) {
-      alert("Quantità non disponibile.");
-      return;
+	vendiProdotto(tipoProdotto, quantita, prezzo) {
+    let quantitaDisponibile = this.prodotti[tipoProdotto];
+    if (!quantitaDisponibile || quantitaDisponibile < quantita) {
+        alert("Prodotto non disponibile o quantità non disponibile.");
+        return;
     }
     this.prodotti[tipoProdotto] -= quantita;
-    alert(`Hai venduto ${quantita} di ${tipoProdotto}.`);
-  }
-  
-  
+    let guadagno = quantita * prezzo;
+    this.guadagno = (this.guadagno || 0) + guadagno;
+    alert(`Hai venduto ${quantita} quintali di ${tipoProdotto} a ${prezzo} per quintale. Guadagno totale: ${this.guadagno}.`);
+}
+	
 
-  mostraStato() {
-    let stato = "Stato della fattoria:\n";
-    stato += "Animali:\n";
-    this.animali.forEach((animale, indice) => {
-      stato += `${indice + 1}. ${animale.tipo} - Salute: ${animale.salute}, Fame: ${animale.fame}\n`;
-    });
-    stato += "Campi:\n";
-    this.campi.forEach((campo, indice) => {
-      stato += `${indice + 1}. ${campo.tipoColtura} - Quantità: ${campo.quantita}\n`;
-    });
-    stato += "Prodotti:\n";
-    for (let tipoProdotto in this.prodotti) {
-      stato += `${tipoProdotto}: ${this.prodotti[tipoProdotto]}\n`;
-    }
-    return stato;
-  }
+mostraStato() {
+	let stato = "Stato della fattoria:\n";
+	stato += "Animali:\n";
+	this.animali.forEach((animale, indice) => {
+			stato += `${indice + 1}. ${animale.tipo} - Salute: ${animale.salute}, Fame: ${animale.fame}\n`;
+	});
+	stato += "Campi:\n";
+	this.campi.forEach((campo, indice) => {
+			stato += `${indice + 1}. ${campo.tipoColtura} - Quantità: ${campo.quantita} ettari\n`;
+	});
+	stato += "Prodotti:\n";
+	for (let tipoProdotto in this.prodotti) {
+			stato += `${tipoProdotto}: ${this.prodotti[tipoProdotto]} quintali - Guadagno: ${this.guadagno} euro\n`;
+	}
+	return stato;
+}
 }
 
 
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					break;
 				case "3":
 					let tipoColtura = prompt("Inserisci il tipo di coltura:");
-					let quantita = parseInt(prompt("Inserisci la quantità:"));
+					let quantita = parseInt(prompt("Inserisci la capienza:"));
 					let campo = new Campo(tipoColtura, quantita);
           fattoria.aggiungiCampo(campo);
           
@@ -180,14 +184,13 @@ document.addEventListener("DOMContentLoaded", function () {
           fattoria.raccogliColtura(indiceCampoRaccogli - 1, quantitaRaccogli);
           break;
 				
-				case "6":
-          let tipoProdotto = prompt("Inserisci il tipo di prodotto:");
-          let quantitaProdotto = parseInt(
-            prompt("Inserisci la quantità da vendere:")
-          );
-          fattoria.vendiProdotto(tipoProdotto, quantitaProdotto);
-          
-          break;
+					case "6":
+						let tipoProdotto = prompt("Inserisci il tipo di prodotto:");
+						let quantitaProdotto = parseInt(prompt("Inserisci la quantità da vendere:"));
+						let prezzoProdotto = parseFloat(prompt("Inserisci il prezzo del prodotto:")); 
+					fattoria.vendiProdotto(tipoProdotto, quantitaProdotto, prezzoProdotto);
+					
+						break;
 				case "7":
 					alert(fattoria.mostraStato());
 					break;
