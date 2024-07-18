@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					case "6":
 						let tipoProdotto = prompt("Inserisci il tipo di prodotto:");
 						let quantitaProdotto = parseInt(prompt("Inserisci la quantità da vendere:"));
-						let prezzoProdotto = parseFloat(prompt("Inserisci il prezzo del prodotto:")); 
+						let prezzoProdotto = parseFloat(prompt("Inserisci il prezzo del prodotto (usare il punto per i decimali):")); 
 					fattoria.vendiProdotto(tipoProdotto, quantitaProdotto, prezzoProdotto);
 					
 						break;
